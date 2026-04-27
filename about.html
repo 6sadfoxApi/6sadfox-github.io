@@ -1,0 +1,58 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/about.html b/about.html
+new file mode 100644
+index 0000000000000000000000000000000000000000..61b718b8084089823661d5215df7310df717277e
+--- /dev/null
++++ b/about.html
+@@ -0,0 +1,48 @@
++<!doctype html>
++<html lang="en">
++  <head>
++    <meta charset="UTF-8" />
++    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++    <title>6SadFox | About Me</title>
++    <meta name="description" content="Learn more about 6SadFox." />
++
++    <link rel="stylesheet" href="style.css" />
++  </head>
++
++  <body>
++    <main class="container">
++      <nav class="top-nav">
++        <a href="index.html">Home</a>
++        <a href="about.html" aria-current="page">About Me</a>
++        <a href="scraper.html">Scraper</a>
++      </nav>
++
++      <h1>&gt; About 6SadFox</h1>
++      <p class="subtitle">Builder, tinkerer, and automation-first coder.</p>
++
++      <section class="terminal">
++        <div class="terminal-bar">profile :: fox-user</div>
++        <div class="terminal-content">
++          <p>
++            I enjoy creating practical web tools, experimenting with automation,
++            and shipping clean user experiences fast.
++          </p>
++          <ul>
++            <li>Focus: web development + scripting</li>
++            <li>Style: terminal-inspired minimal interfaces</li>
++            <li>Goal: build useful systems that run reliably</li>
++          </ul>
++        </div>
++      </section>
++
++      <section class="snake-panel" aria-label="Automated snake visualizer">
++        <div class="terminal-bar">snake-ai :: about-mode</div>
++        <canvas id="snakeCanvas" width="920" height="240"></canvas>
++      </section>
++
++      <footer>Always building. Always learning.</footer>
++    </main>
++
++    <script src="script.js"></script>
++  </body>
++</html>
+ 
+EOF
+)
