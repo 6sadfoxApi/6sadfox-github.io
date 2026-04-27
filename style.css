@@ -1,261 +1,242 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/style.css b/style.css
-index 65eecfda8f4c3f319218371923e581c01439380a..c456dec170d2cc52bb0f100c51851d018a24a221 100644
---- a/style.css
-+++ b/style.css
-@@ -1,91 +1,230 @@
- :root {
-   --bg: #030603;
-   --panel: rgba(6, 18, 6, 0.9);
-   --text: #c7ffd1;
-   --muted: #73c985;
-   --accent: #39ff88;
-   --border: #1b4d2a;
- }
- 
--* { box-sizing: border-box; }
-+* {
-+  box-sizing: border-box;
-+}
- 
- body {
-   margin: 0;
-   font-family: Consolas, 'Courier New', monospace;
-   color: var(--text);
-   background:
-     radial-gradient(circle at 20% 10%, rgba(57, 255, 136, 0.08), transparent 35%),
-     radial-gradient(circle at 80% 0%, rgba(57, 255, 136, 0.06), transparent 30%),
-     repeating-linear-gradient(
-       0deg,
-       rgba(57, 255, 136, 0.05),
-       rgba(57, 255, 136, 0.05) 1px,
-       transparent 1px,
-       transparent 24px
-     ),
-     #030603;
-   min-height: 100vh;
- }
- 
- .container {
-   width: min(980px, 92%);
-   margin: 0 auto;
-   padding: 2.5rem 0 3rem;
- }
- 
--h1, h2, h3 {
-+.top-nav {
-+  display: flex;
-+  gap: 0.9rem;
-+  margin-bottom: 1.2rem;
-+}
-+
-+.top-nav a {
-+  text-decoration: none;
-+  border: 1px solid var(--border);
-+  border-radius: 999px;
-+  padding: 0.35rem 0.75rem;
-+  color: var(--muted);
-+}
-+
-+.top-nav a[aria-current='page'] {
-+  color: #011806;
-+  background: var(--accent);
-+  border-color: var(--accent);
-+}
-+
-+h1,
-+h2,
-+h3 {
-   color: var(--accent);
-   text-shadow: 0 0 10px rgba(57, 255, 136, 0.3);
- }
- 
--.subtitle { color: var(--muted); }
-+.subtitle {
-+  color: var(--muted);
-+}
- 
--.terminal {
-+.terminal,
-+.snake-panel {
-   background: var(--panel);
-   border: 1px solid var(--border);
-   border-radius: 14px;
-   overflow: hidden;
-   margin: 1rem 0;
- }
- 
- .terminal-bar {
-   background: #041004;
-   border-bottom: 1px solid var(--border);
-   padding: 0.6rem 0.9rem;
-   font-size: 0.85rem;
-   color: var(--muted);
- }
- 
--.terminal-content { padding: 1rem 1.1rem; }
-+.terminal-content {
-+  padding: 1rem 1.1rem;
-+}
- 
--.grid {
--  display: grid;
--  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
--  gap: 1rem;
-+.status-line {
-+  margin-top: 10px;
-+  color: #73c985;
-+}
-+
-+#snakeCanvas {
-+  display: block;
-+  width: 100%;
-+  height: auto;
-+  max-height: 260px;
-+}
-+
-+a {
-+  color: var(--accent);
-+}
-+
-+ul,
-+ol {
-+  padding-left: 1.1rem;
-+}
-+
-+li {
-+  margin: 0.35rem 0;
-+}
-+
-+footer {
-+  margin-top: 1.2rem;
-+  color: var(--muted);
-+  font-size: 0.92rem;
-+}
-+
-+.scraper-form {
-+  display: flex;
-+  gap: 0.6rem;
-+  flex-wrap: wrap;
-+}
-+
-+.scraper-form input {
-+  flex: 1 1 320px;
-+  min-width: 220px;
-+  background: #031008;
-+  color: var(--text);
-+  border: 1px solid var(--border);
-+  border-radius: 8px;
-+  padding: 0.6rem;
-+}
-+
-+.scraper-form button {
-+  background: var(--accent);
-+  color: #011806;
-+  border: 0;
-+  border-radius: 8px;
-+  padding: 0.6rem 1rem;
-+  cursor: pointer;
-+  font-weight: 700;
- }
- 
- .card {
--  background: var(--panel);
-+  margin-top: 0.9rem;
-+  background: rgba(4, 16, 4, 0.7);
-   border: 1px solid var(--border);
-   border-radius: 12px;
-   padding: 1rem;
- }
- 
--a { color: var(--accent); }
-+.card pre {
-+  white-space: pre-wrap;
-+}
- 
--code {
--  background: #021002;
--  border: 1px solid var(--border);
--  border-radius: 6px;
--  padding: 0.15rem 0.4rem;
--  color: #afffc8;
-+.hidden {
-+  display: none;
- }
- 
--ul, ol { padding-left: 1.1rem; }
--li { margin: 0.35rem 0; }
-+.history-list {
-+  list-style: none;
-+  padding-left: 0;
-+  margin: 0;
-+}
- 
--footer {
--  margin-top: 1.2rem;
-+.history-list li {
-+  border-bottom: 1px solid rgba(57, 255, 136, 0.2);
-+  padding: 0.6rem 0;
-+  display: flex;
-+  justify-content: space-between;
-+  gap: 1rem;
-+}
-+
-+.muted {
-   color: var(--muted);
--  font-size: 0.92rem;
-+  font-size: 0.88rem;
-+}
-+
-+.cyber-bg {
-+  position: fixed;
-+  inset: 0;
-+  pointer-events: none;
-+  z-index: 0;
-+  overflow: hidden;
-+}
-+
-+.glow-orb {
-+  position: absolute;
-+  width: 420px;
-+  height: 420px;
-+  border-radius: 50%;
-+  top: -120px;
-+  right: -80px;
-+  background: radial-gradient(circle, rgba(57, 255, 136, 0.35), rgba(57, 255, 136, 0.02) 65%, transparent 72%);
-+  filter: blur(6px);
-+  animation: pulse-orb 4s ease-in-out infinite;
-+}
-+
-+.scan-lines {
-+  position: absolute;
-+  inset: 0;
-+  background: repeating-linear-gradient(
-+    0deg,
-+    rgba(57, 255, 136, 0.07),
-+    rgba(57, 255, 136, 0.07) 1px,
-+    transparent 1px,
-+    transparent 20px
-+  );
-+  opacity: 0.35;
-+}
-+
-+.container {
-+  position: relative;
-+  z-index: 1;
-+}
-+
-+@keyframes pulse-orb {
-+  0%,
-+  100% {
-+    transform: scale(1);
-+    opacity: 0.55;
-+  }
-+  50% {
-+    transform: scale(1.1);
-+    opacity: 0.9;
-+  }
- }
- 
+cat > style.css <<'EOF'
+:root {
+  --bg: #030603;
+  --panel: rgba(6, 18, 6, 0.9);
+  --text: #c7ffd1;
+  --muted: #73c985;
+  --accent: #39ff88;
+  --border: #1b4d2a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Consolas, "Courier New", monospace;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 20% 10%, rgba(57, 255, 136, 0.08), transparent 35%),
+    radial-gradient(circle at 80% 0%, rgba(57, 255, 136, 0.06), transparent 30%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(57, 255, 136, 0.05),
+      rgba(57, 255, 136, 0.05) 1px,
+      transparent 1px,
+      transparent 24px
+    ),
+    #030603;
+  min-height: 100vh;
+}
+
+.cyber-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.glow-orb {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  top: -120px;
+  right: -80px;
+  background: radial-gradient(
+    circle,
+    rgba(57, 255, 136, 0.35),
+    rgba(57, 255, 136, 0.02) 65%,
+    transparent 72%
+  );
+  filter: blur(6px);
+  animation: pulse-orb 4s ease-in-out infinite;
+}
+
+.scan-lines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(57, 255, 136, 0.07),
+    rgba(57, 255, 136, 0.07) 1px,
+    transparent 1px,
+    transparent 20px
+  );
+  opacity: 0.35;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 92%);
+  margin: 0 auto;
+  padding: 2.5rem 0 3rem;
+}
+
+.top-nav {
+  display: flex;
+  gap: 0.9rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.top-nav a {
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  color: var(--muted);
+}
+
+.top-nav a[aria-current="page"] {
+  color: #011806;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+h1,
+h2,
+h3 {
+  color: var(--accent);
+  text-shadow: 0 0 10px rgba(57, 255, 136, 0.3);
+}
+
+.subtitle {
+  color: var(--muted);
+}
+
+.terminal,
+.snake-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 1rem 0;
+  box-shadow: 0 0 22px rgba(57, 255, 136, 0.15);
+}
+
+.terminal-bar {
+  background: #041004;
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.terminal-content {
+  padding: 1rem 1.1rem;
+}
+
+.status-line {
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+#snakeCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 260px;
+  background: #020802;
+}
+
+a {
+  color: var(--accent);
+}
+
+ul,
+ol {
+  padding-left: 1.1rem;
+}
+
+li {
+  margin: 0.35rem 0;
+}
+
+footer {
+  margin-top: 1.2rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.scraper-form {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.scraper-form input {
+  flex: 1 1 320px;
+  min-width: 220px;
+  background: #031008;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem;
+}
+
+.scraper-form button {
+  background: var(--accent);
+  color: #011806;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.card {
+  margin-top: 0.9rem;
+  background: rgba(4, 16, 4, 0.7);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.card pre {
+  white-space: pre-wrap;
+}
+
+.hidden {
+  display: none;
+}
+
+.history-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.history-list li {
+  border-bottom: 1px solid rgba(57, 255, 136, 0.2);
+  padding: 0.6rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+@keyframes pulse-orb {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 0.9;
+  }
+}
 EOF
-)
+
+git add style.css
+git commit -m "Fix cyber background CSS"
+git push origin main
