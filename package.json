@@ -1,0 +1,20 @@
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/package.json b/package.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..7288c4099dbc08db6d10d6b3a0683fe16ab45772
+--- /dev/null
++++ b/package.json
+@@ -0,0 +1,10 @@
++{
++  "name": "foxcorp-site-backend",
++  "version": "1.0.0",
++  "private": true,
++  "description": "Backend service for foxcorp.com",
++  "main": "server.js",
++  "scripts": {
++    "start": "node server.js"
++  }
++}
+ 
+EOF
+)
