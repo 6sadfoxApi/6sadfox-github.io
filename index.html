@@ -4,86 +4,39 @@ cat > index.html <<'EOF'
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>6SadFox | Home</title>
-  <meta name="description" content="6SadFox GitHub Pages starter site." />
-
-  <link rel="stylesheet" href="style.css?v=7" />
+  <link rel="stylesheet" href="style.css?v=9" />
 </head>
 
 <body>
-  <div class="cyber-bg" aria-hidden="true">
-    <div class="glow-orb"></div>
-    <div class="scan-lines"></div>
-  </div>
-
   <main class="container">
-    <nav class="top-nav">
-      <a href="index.html" aria-current="page">Home</a>
-      <a href="about.html">About Me</a>
-      <a href="scraper.html">Scraper</a>
-      <a href="#notes">Notes</a>
-      <a href="#pong">Pong</a>
-    </nav>
 
-    <h1>&gt; 6SadFox GitHub Pages</h1>
-    <p class="subtitle">Cyber command center with notes database, AI timeline, snake, and automated Pong.</p>
+    <h1>&gt; AI Notes + Timeline</h1>
 
     <section class="terminal">
-      <div class="terminal-bar">terminal :: production</div>
-      <div class="terminal-content">
-        <p><strong>Live URL:</strong> <a href="https://6sadfoxapi.github.io">https://6sadfoxapi.github.io</a></p>
-        <p><strong>Random Value:</strong> <span id="randomNumber">--</span></p>
-        <p class="status-line">Snake automation: ACTIVE</p>
-      </div>
-    </section>
-
-    <section id="notes" class="terminal">
       <div class="terminal-bar">notes :: database + ai-timeline</div>
 
       <div class="terminal-content">
-        <textarea id="noteInput" placeholder="Enter note for AI system..."></textarea>
+        <textarea id="noteInput" placeholder="Type note..."></textarea>
 
         <div class="button-row">
-          <button id="saveNote" type="button">Save Note</button>
-          <button id="clearNotes" type="button" class="ghost-button">Clear Notes</button>
+          <button id="saveNote">Save Note</button>
+          <button id="clearNotes">Clear</button>
         </div>
 
-        <p id="noteStatus" class="status-line">Notes ready.</p>
+        <p id="noteStatus">Ready.</p>
 
-        <div class="timeline-box">
-          <h2>AI Thinking Timeline</h2>
-          <div id="thinkingTimeline" class="thinking-timeline">
-            <div class="timeline-empty">Waiting for a note...</div>
-          </div>
-        </div>
+        <h2>AI Thinking Timeline</h2>
+        <div id="thinkingTimeline"></div>
 
-        <div class="database-box">
-          <h2>Saved Notes Database</h2>
-          <div id="notesList" class="notes-list"></div>
-        </div>
+        <h2>Saved Notes</h2>
+        <div id="notesList"></div>
       </div>
     </section>
 
-    <section class="snake-panel" aria-label="Automated snake visualizer">
-      <div class="terminal-bar">snake-ai :: autonomous</div>
-      <canvas id="snakeCanvas" width="920" height="240"></canvas>
-    </section>
-
-    <section id="pong" class="snake-panel">
-      <div class="terminal-bar">pong-ai :: left-agent vs right-agent</div>
-      <canvas id="pongCanvas" width="920" height="300"></canvas>
-
-      <div class="scoreboard">
-        <span>Left AI: <strong id="leftScore">0</strong></span>
-        <span>Right AI: <strong id="rightScore">0</strong></span>
-      </div>
-    </section>
-
-    <footer>Built for GitHub Pages + Node backend</footer>
   </main>
 
-  <script src="script.js?v=7"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>
 EOF
