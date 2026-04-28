@@ -1,103 +1,26 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/package.json b/package.json
-index 04965ac2e275e4f577ff78833a3cf1ad6d644280..493835a446cc86854933886c025c740c1a851481 100644
---- a/package.json
-+++ b/package.json
-@@ -1,85 +1,9 @@
-- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
--diff --git a/server.js b/server.js
--index 1659d3b0c55994b6dd343a2d2f20b44472803196..272f1248e77fa896c5bcab3944447687a05a4cdd 100644
----- a/server.js
--+++ b/server.js
--@@ -1,34 +1,42 @@
--- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
---diff --git a/server.js b/server.js
---new file mode 100644
---index 0000000000000000000000000000000000000000..9952a4375629a4450f18aa33374ee205a36f47b5
------ /dev/null
---+++ b/server.js
---@@ -0,0 +1,24 @@
---+const http = require('http');
---+
---+const port = Number(process.env.PORT || 3000);
---+
---+const server = http.createServer((req, res) => {
---+  if (req.url === '/' || req.url === '/health') {
---+    if (req.url === '/') {
---+      res.writeHead(200, { 'Content-Type': 'application/json' });
---+      res.end(JSON.stringify({ status: 'ok', message: 'Server is live' }));
---+      return;
---+    }
---+
---+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
---+    res.end('Server is live');
---+    return;
---+  }
---+
---+  res.writeHead(404, { 'Content-Type': 'application/json' });
---+  res.end(JSON.stringify({ status: 'error', message: 'Not Found' }));
---+});
---+
---+server.listen(port, () => {
---+  console.log(`Server is live on port ${port}`);
---+});
--- 
---EOF
---)
--+const http = require('http');
--+const fs = require('fs');
--+const path = require('path');
--+
--+const port = Number(process.env.PORT || 3000);
--+const root = __dirname;
--+
--+const contentTypeByExt = {
--+  '.html': 'text/html; charset=utf-8',
--+  '.css': 'text/css; charset=utf-8',
--+  '.js': 'text/javascript; charset=utf-8',
--+  '.json': 'application/json; charset=utf-8',
--+  '.png': 'image/png',
--+  '.jpg': 'image/jpeg',
--+  '.jpeg': 'image/jpeg',
--+  '.svg': 'image/svg+xml',
--+  '.ico': 'image/x-icon',
--+};
--+
--+const server = http.createServer((req, res) => {
--+  const urlPath = req.url === '/' ? '/index.html' : req.url;
--+  const filePath = path.join(root, decodeURIComponent(urlPath));
--+
--+  fs.readFile(filePath, (error, data) => {
--+    if (error) {
--+      fs.readFile(path.join(root, '404.html'), (notFoundErr, notFoundData) => {
--+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
--+        res.end(notFoundErr ? '404 Not Found' : notFoundData);
--+      });
--+      return;
--+    }
--+
--+    const ext = path.extname(filePath).toLowerCase();
--+    const contentType = contentTypeByExt[ext] || 'application/octet-stream';
--+    res.writeHead(200, { 'Content-Type': contentType });
--+    res.end(data);
--+  });
--+});
--+
--+server.listen(port, () => {
--+  console.log(`Server is live on http://localhost:${port}`);
--+});
-- 
--EOF
--)
-+{
-+  "name": "6sadfox-github-io",
-+  "version": "1.0.0",
-+  "private": true,
-+  "description": "Static GitHub Pages site with local preview server",
-+  "scripts": {
-+    "start": "node server.js"
-+  }
-+}
- 
+cat > package.json <<'EOF'
+{
+  "name": "6sadfox-github-io",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static site with scraper backend and local preview server",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "check": "node --check server.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "openai": "^4.77.0"
+  }
+}
 EOF
-)
+
+npm install
+
+git add package.json package-lock.json
+git commit -m "Add scraper backend dependencies"
+git push origin main
