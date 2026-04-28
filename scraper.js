@@ -1,111 +1,139 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/scraper.js b/scraper.js
-new file mode 100644
-index 0000000000000000000000000000000000000000..68290d75bdbe6ccebc01e7fc783e72c60f049baf
---- /dev/null
-+++ b/scraper.js
-@@ -0,0 +1,101 @@
-+(function initScraper() {
-+  const urlInput = document.getElementById('urlInput');
-+  const scrapeButton = document.getElementById('scrapeButton');
-+  const scraperStatus = document.getElementById('scraperStatus');
-+  const resultCard = document.getElementById('resultCard');
-+  const historyList = document.getElementById('historyList');
-+
-+  if (!urlInput || !scrapeButton || !scraperStatus || !resultCard || !historyList) {
-+    return;
-+  }
-+
-+  function escapeHtml(value) {
-+    return String(value)
-+      .replaceAll('&', '&amp;')
-+      .replaceAll('<', '&lt;')
-+      .replaceAll('>', '&gt;')
-+      .replaceAll('"', '&quot;')
-+      .replaceAll("'", '&#39;');
-+  }
-+
-+  function renderResult(entry) {
-+    const aiBlock = entry.aiSummary
-+      ? `<h3>AI Summary</h3><pre>${escapeHtml(entry.aiSummary)}</pre>`
-+      : `<p>${escapeHtml(entry.aiNote || 'AI summary unavailable.')}</p>`;
-+
-+    resultCard.classList.remove('hidden');
-+    resultCard.innerHTML = `
-+      <h3>${escapeHtml(entry.title)}</h3>
-+      <p><strong>URL:</strong> <a href="${escapeHtml(entry.source)}" target="_blank" rel="noreferrer">${escapeHtml(entry.source)}</a></p>
-+      <p><strong>Description:</strong> ${escapeHtml(entry.description || 'No description found.')}</p>
-+      ${entry.image ? `<p><strong>OG Image:</strong> ${escapeHtml(entry.image)}</p>` : ''}
-+      ${aiBlock}
-+    `;
-+  }
-+
-+  function renderHistory(entries) {
-+    historyList.innerHTML = '';
-+
-+    if (!entries.length) {
-+      historyList.innerHTML = '<li>No scrapes yet.</li>';
-+      return;
-+    }
-+
-+    entries.slice(0, 10).forEach((entry) => {
-+      const li = document.createElement('li');
-+      li.innerHTML = `
-+        <strong>${escapeHtml(entry.title)}</strong>
-+        <span class="muted">${new Date(entry.createdAt).toLocaleString()}</span>
-+      `;
-+      historyList.appendChild(li);
-+    });
-+  }
-+
-+  async function loadHistory() {
-+    const response = await fetch('/api/scrapes');
-+    if (!response.ok) {
-+      throw new Error('Failed to load scrape history.');
-+    }
-+
-+    const payload = await response.json();
-+    renderHistory(payload.entries || []);
-+  }
-+
-+  async function scrape() {
-+    const url = urlInput.value.trim();
-+
-+    if (!url) {
-+      scraperStatus.textContent = 'Enter a URL first.';
-+      return;
-+    }
-+
-+    scraperStatus.textContent = 'Scraping...';
-+    scrapeButton.disabled = true;
-+
-+    try {
-+      const response = await fetch('/api/scrape', {
-+        method: 'POST',
-+        headers: { 'Content-Type': 'application/json' },
-+        body: JSON.stringify({ url }),
-+      });
-+
-+      const payload = await response.json();
-+      if (!response.ok) {
-+        throw new Error(payload.error || 'Scrape failed.');
-+      }
-+
-+      renderResult(payload.entry);
-+      await loadHistory();
-+      scraperStatus.textContent = 'Scrape complete.';
-+    } catch (error) {
-+      scraperStatus.textContent = error.message;
-+    } finally {
-+      scrapeButton.disabled = false;
-+    }
-+  }
-+
-+  scrapeButton.addEventListener('click', scrape);
-+  loadHistory().catch((error) => {
-+    scraperStatus.textContent = error.message;
-+  });
-+})();
- 
+cat > scraper.js <<'EOF'
+const urlInput = document.getElementById('urlInput');
+const scrapeButton = document.getElementById('scrapeButton');
+const scraperStatus = document.getElementById('scraperStatus');
+const resultCard = document.getElementById('resultCard');
+const resultTitle = document.getElementById('resultTitle');
+const resultUrl = document.getElementById('resultUrl');
+const resultDescription = document.getElementById('resultDescription');
+const resultSummary = document.getElementById('resultSummary');
+const historyList = document.getElementById('historyList');
+
+function setStatus(message) {
+  if (scraperStatus) {
+    scraperStatus.textContent = message;
+  }
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[char]);
+}
+
+function renderResult(scrape) {
+  if (!resultCard) return;
+
+  resultCard.classList.remove('hidden');
+
+  if (resultTitle) resultTitle.textContent = scrape.title || 'Untitled';
+
+  if (resultUrl) {
+    resultUrl.textContent = scrape.url;
+    resultUrl.href = scrape.url;
+  }
+
+  if (resultDescription) {
+    resultDescription.textContent = scrape.description || 'No description found.';
+  }
+
+  if (resultSummary) {
+    resultSummary.textContent =
+      `Title: ${scrape.title}\n` +
+      `URL: ${scrape.url}\n` +
+      `Description: ${scrape.description}\n\n` +
+      `AI-ready summary: This page appears to be about "${scrape.title}".`;
+  }
+}
+
+function renderHistory(scrapes) {
+  if (!historyList) return;
+
+  historyList.innerHTML = '';
+
+  if (!scrapes.length) {
+    historyList.innerHTML = '<li>No scrape history yet.</li>';
+    return;
+  }
+
+  scrapes.slice(0, 20).forEach((scrape) => {
+    const li = document.createElement('li');
+
+    li.innerHTML = `
+      <div>
+        <strong>${escapeHtml(scrape.title || 'Untitled')}</strong>
+        <br />
+        <a href="${escapeHtml(scrape.url)}" target="_blank" rel="noopener noreferrer">
+          ${escapeHtml(scrape.url)}
+        </a>
+        <br />
+        <span class="muted">${escapeHtml(new Date(scrape.createdAt).toLocaleString())}</span>
+      </div>
+    `;
+
+    historyList.appendChild(li);
+  });
+}
+
+async function loadHistory() {
+  try {
+    const response = await fetch('/api/history');
+    const scrapes = await response.json();
+    renderHistory(Array.isArray(scrapes) ? scrapes : []);
+  } catch {
+    renderHistory([]);
+  }
+}
+
+async function scrapeUrl() {
+  const url = urlInput.value.trim();
+
+  if (!url) {
+    setStatus('Enter a URL first.');
+    return;
+  }
+
+  setStatus('Scraping...');
+  scrapeButton.disabled = true;
+
+  try {
+    const response = await fetch('/api/scrape', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Scrape failed.');
+    }
+
+    renderResult(data);
+    await loadHistory();
+    setStatus('Scrape saved to data/scrapes.json.');
+  } catch (error) {
+    setStatus(error.message || 'Something went wrong.');
+  } finally {
+    scrapeButton.disabled = false;
+  }
+}
+
+if (scrapeButton) {
+  scrapeButton.addEventListener('click', scrapeUrl);
+}
+
+if (urlInput) {
+  urlInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      scrapeUrl();
+    }
+  });
+}
+
+loadHistory();
 EOF
-)
