@@ -1,4 +1,3 @@
-cat > index.html <<'EOF'
 <!doctype html>
 <html lang="en">
 <head>
@@ -22,11 +21,14 @@ cat > index.html <<'EOF'
       <a href="index.html" aria-current="page">Home</a>
       <a href="about.html">About Me</a>
       <a href="scraper.html">Scraper</a>
+      <a href="#notes">Notes</a>
+      <a href="#pong">Pong</a>
     </nav>
 
     <h1>&gt; 6SadFox GitHub Pages</h1>
     <p class="subtitle">Black + green cyber terminal with automated snake theme.</p>
 
+    <!-- EXISTING TERMINAL -->
     <section class="terminal">
       <div class="terminal-bar">terminal :: production</div>
 
@@ -45,9 +47,41 @@ cat > index.html <<'EOF'
       </div>
     </section>
 
+    <!-- NEW: NOTES SYSTEM -->
+    <section id="notes" class="terminal">
+      <div class="terminal-bar">notes :: local-database</div>
+
+      <div class="terminal-content">
+        <textarea
+          id="noteInput"
+          placeholder="Enter note for AI system..."
+          style="width:100%; height:100px; margin-top:10px;"
+        ></textarea>
+
+        <div style="margin-top:10px;">
+          <button id="saveNote">Save</button>
+          <button id="clearNotes">Clear</button>
+        </div>
+
+        <div id="notesList" style="margin-top:15px;"></div>
+      </div>
+    </section>
+
+    <!-- EXISTING SNAKE -->
     <section class="snake-panel" aria-label="Automated snake visualizer">
       <div class="terminal-bar">snake-ai :: autonomous</div>
       <canvas id="snakeCanvas" width="920" height="240"></canvas>
+    </section>
+
+    <!-- NEW: AI PONG -->
+    <section id="pong" class="snake-panel">
+      <div class="terminal-bar">pong-ai :: vs-ai</div>
+      <canvas id="pongCanvas" width="920" height="300"></canvas>
+
+      <div style="display:flex; justify-content:space-between; margin-top:8px;">
+        <span>Left AI: <strong id="leftScore">0</strong></span>
+        <span>Right AI: <strong id="rightScore">0</strong></span>
+      </div>
     </section>
 
     <footer>Built for GitHub Pages</footer>
@@ -56,8 +90,3 @@ cat > index.html <<'EOF'
   <script src="script.js"></script>
 </body>
 </html>
-EOF
-
-git add index.html
-git commit -m "Fix homepage HTML structure"
-git push origin main)
