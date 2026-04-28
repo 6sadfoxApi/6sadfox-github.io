@@ -1,3 +1,4 @@
+cat > index.html <<'EOF'
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,11 +8,11 @@
   <title>6SadFox | Home</title>
   <meta name="description" content="6SadFox GitHub Pages starter site." />
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=7" />
 </head>
 
 <body>
-  <div class="cyber-bg">
+  <div class="cyber-bg" aria-hidden="true">
     <div class="glow-orb"></div>
     <div class="scan-lines"></div>
   </div>
@@ -26,67 +27,63 @@
     </nav>
 
     <h1>&gt; 6SadFox GitHub Pages</h1>
-    <p class="subtitle">Black + green cyber terminal with automated snake theme.</p>
+    <p class="subtitle">Cyber command center with notes database, AI timeline, snake, and automated Pong.</p>
 
-    <!-- EXISTING TERMINAL -->
     <section class="terminal">
       <div class="terminal-bar">terminal :: production</div>
-
       <div class="terminal-content">
-        <p>
-          <strong>Live URL:</strong>
-          <a href="https://6sadfoxapi.github.io">https://6sadfoxapi.github.io</a>
-        </p>
-
-        <p>
-          <strong>Random Value:</strong>
-          <span id="randomNumber">--</span>
-        </p>
-
+        <p><strong>Live URL:</strong> <a href="https://6sadfoxapi.github.io">https://6sadfoxapi.github.io</a></p>
+        <p><strong>Random Value:</strong> <span id="randomNumber">--</span></p>
         <p class="status-line">Snake automation: ACTIVE</p>
       </div>
     </section>
 
-    <!-- NEW: NOTES SYSTEM -->
     <section id="notes" class="terminal">
-      <div class="terminal-bar">notes :: local-database</div>
+      <div class="terminal-bar">notes :: database + ai-timeline</div>
 
       <div class="terminal-content">
-        <textarea
-          id="noteInput"
-          placeholder="Enter note for AI system..."
-          style="width:100%; height:100px; margin-top:10px;"
-        ></textarea>
+        <textarea id="noteInput" placeholder="Enter note for AI system..."></textarea>
 
-        <div style="margin-top:10px;">
-          <button id="saveNote">Save</button>
-          <button id="clearNotes">Clear</button>
+        <div class="button-row">
+          <button id="saveNote" type="button">Save Note</button>
+          <button id="clearNotes" type="button" class="ghost-button">Clear Notes</button>
         </div>
 
-        <div id="notesList" style="margin-top:15px;"></div>
+        <p id="noteStatus" class="status-line">Notes ready.</p>
+
+        <div class="timeline-box">
+          <h2>AI Thinking Timeline</h2>
+          <div id="thinkingTimeline" class="thinking-timeline">
+            <div class="timeline-empty">Waiting for a note...</div>
+          </div>
+        </div>
+
+        <div class="database-box">
+          <h2>Saved Notes Database</h2>
+          <div id="notesList" class="notes-list"></div>
+        </div>
       </div>
     </section>
 
-    <!-- EXISTING SNAKE -->
     <section class="snake-panel" aria-label="Automated snake visualizer">
       <div class="terminal-bar">snake-ai :: autonomous</div>
       <canvas id="snakeCanvas" width="920" height="240"></canvas>
     </section>
 
-    <!-- NEW: AI PONG -->
     <section id="pong" class="snake-panel">
-      <div class="terminal-bar">pong-ai :: vs-ai</div>
+      <div class="terminal-bar">pong-ai :: left-agent vs right-agent</div>
       <canvas id="pongCanvas" width="920" height="300"></canvas>
 
-      <div style="display:flex; justify-content:space-between; margin-top:8px;">
+      <div class="scoreboard">
         <span>Left AI: <strong id="leftScore">0</strong></span>
         <span>Right AI: <strong id="rightScore">0</strong></span>
       </div>
     </section>
 
-    <footer>Built for GitHub Pages</footer>
+    <footer>Built for GitHub Pages + Node backend</footer>
   </main>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
+EOF
