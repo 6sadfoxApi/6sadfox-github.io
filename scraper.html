@@ -1,76 +1,102 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/scraper.html b/scraper.html
-new file mode 100644
-index 0000000000000000000000000000000000000000..31ca5710fd84cf9e0d7d7e773a6e3747056209b7
---- /dev/null
-+++ b/scraper.html
-@@ -0,0 +1,66 @@
-+<!doctype html>
-+<html lang="en">
-+  <head>
-+    <meta charset="UTF-8" />
-+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-+    <title>6SadFox | Scraper</title>
-+    <meta name="description" content="Scrape URL metadata and generate AI summaries." />
-+
-+    <link rel="stylesheet" href="style.css?v=3" />
-+
-+    <style id="critical-neon-fallback">
-+      body {
-+        margin: 0;
-+        background: #030603;
-+        color: #c7ffd1;
-+        font-family: Consolas, 'Courier New', monospace;
-+      }
-+      .container {
-+        width: min(980px, 92%);
-+        margin: 0 auto;
-+        padding: 2.5rem 0 3rem;
-+      }
-+      h1 { color: #39ff88; }
-+    </style>
-+  </head>
-+
-+  <body>
-+    <div class="cyber-bg" aria-hidden="true">
-+      <div class="glow-orb"></div>
-+      <div class="scan-lines"></div>
-+    </div>
-+    <main class="container">
-+      <nav class="top-nav">
-+        <a href="index.html">Home</a>
-+        <a href="about.html">About Me</a>
-+        <a href="scraper.html" aria-current="page">Scraper</a>
-+      </nav>
-+
-+      <h1>&gt; Metadata Scraper</h1>
-+      <p class="subtitle">Paste a URL and push one button to scrape, store, and summarize.</p>
-+
-+      <section class="terminal">
-+        <div class="terminal-bar">scraper :: one-click</div>
-+        <div class="terminal-content">
-+          <div class="scraper-form">
-+            <input id="urlInput" type="url" placeholder="https://example.com" />
-+            <button id="scrapeButton" type="button">Scrape URL</button>
-+          </div>
-+          <p id="scraperStatus" class="status-line">Ready.</p>
-+          <article id="resultCard" class="card hidden"></article>
-+        </div>
-+      </section>
-+
-+      <section class="terminal">
-+        <div class="terminal-bar">storage :: latest scrapes</div>
-+        <div class="terminal-content">
-+          <ul id="historyList" class="history-list"></ul>
-+        </div>
-+      </section>
-+
-+      <footer>API key is loaded from OPENAI_API_KEY on the server.</footer>
-+    </main>
-+
-+    <script src="scraper.js?v=3"></script>
-+  </body>
-+</html>
- 
+ cat > scraper.html <<'EOF'
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>6SadFox | Scraper</title>
+  <meta name="description" content="Scrape URL metadata, store history, and prepare AI summaries." />
+
+  <link rel="stylesheet" href="style.css?v=4" />
+</head>
+
+<body>
+  <div class="cyber-bg" aria-hidden="true">
+    <div class="glow-orb"></div>
+    <div class="scan-lines"></div>
+  </div>
+
+  <main class="container">
+    <nav class="top-nav">
+      <a href="index.html">Home</a>
+      <a href="about.html">About Me</a>
+      <a href="scraper.html" aria-current="page">Scraper</a>
+    </nav>
+
+    <h1>&gt; Metadata Scraper</h1>
+    <p class="subtitle">
+      Paste a URL, scrape metadata, save history, and prepare the page for AI summary output.
+    </p>
+
+    <section class="terminal">
+      <div class="terminal-bar">scraper :: command-center</div>
+
+      <div class="terminal-content">
+        <div class="scraper-form">
+          <input
+            id="urlInput"
+            type="url"
+            placeholder="https://example.com"
+            autocomplete="url"
+          />
+
+          <button id="scrapeButton" type="button">Scrape URL</button>
+        </div>
+
+        <p id="scraperStatus" class="status-line">Ready.</p>
+
+        <article id="resultCard" class="card hidden">
+          <h2 id="resultTitle">No scrape loaded</h2>
+
+          <p>
+            <strong>URL:</strong>
+            <a id="resultUrl" href="#" target="_blank" rel="noopener noreferrer">--</a>
+          </p>
+
+          <p>
+            <strong>Description:</strong>
+            <span id="resultDescription">--</span>
+          </p>
+
+          <p>
+            <strong>AI Summary:</strong>
+          </p>
+
+          <pre id="resultSummary">Waiting for summary...</pre>
+        </article>
+      </div>
+    </section>
+
+    <section class="terminal">
+      <div class="terminal-bar">storage :: latest-scrapes</div>
+
+      <div class="terminal-content">
+        <ul id="historyList" class="history-list"></ul>
+      </div>
+    </section>
+
+    <section class="terminal">
+      <div class="terminal-bar">system :: next-upgrades</div>
+
+      <div class="terminal-content">
+        <ul>
+          <li>Connect scraper to <strong>/api/scrape</strong> in server.js</li>
+          <li>Store scrape history in localStorage first</li>
+          <li>Upgrade later to Supabase or MongoDB</li>
+          <li>Let OpenAI robot read stored scrape notes through backend API</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>API key should stay server-side only. Do not place it in scraper.html.</footer>
+  </main>
+
+  <script src="scraper.js?v=4"></script>
+</body>
+</html>
 EOF
-)
+
+git add scraper.html
+git commit -m "Upgrade scraper page"
+git push origin main
