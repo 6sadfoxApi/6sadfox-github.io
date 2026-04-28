@@ -13,3 +13,7 @@ npm run check
 git add server.js script.js style.css data/notes.json data/scrapes.json package.json package-lock.json
 git commit -m "Add notes API database with metadata"
 git push origin main
+npm run check
+git add index.html server.js script.js style.css data/notes.json data/scrapes.json
+git commit -m "Add AI thinking timeline under notes"
+git push origin main
